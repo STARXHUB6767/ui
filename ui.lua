@@ -199,7 +199,7 @@ function Library.CreateLib(title, theme)
     local Sidebar = mk("Frame", { Size=UDim2.new(0, SIDE_W, 1, 0), BackgroundColor3=C.Sidebar, BackgroundTransparency=T.Sidebar, BorderSizePixel=0 }, Main)
     mk("Frame", { Size=UDim2.new(0,1,1,0), Position=UDim2.new(1,-1,0,0), BackgroundColor3=C.White, BackgroundTransparency=T.Line, BorderSizePixel=0 }, Sidebar)
 
-    -- แก้ไขโลโก้: เอากรอบขาวออก ใส่สีพื้นหลังแดงเข้ม และสีรูปเป็นสีแดง
+    -- ★ แก้ไขโลโก้: เปลี่ยนสีรูปภาพให้เป็นสีขาวเพื่อให้ตัดกับพื้นหลังแดงเข้ม
     local Brand = mk("Frame", { Size=UDim2.new(1,0,0,72), BackgroundTransparency=1 }, Sidebar)
     local logo = mk("Frame", { Size=UDim2.fromOffset(48,48), Position=UDim2.fromOffset(12,12), BackgroundColor3=C.Accent2, BorderSizePixel=0 }, Brand)
     corner(logo, 14)
@@ -207,7 +207,7 @@ function Library.CreateLib(title, theme)
         Size=UDim2.fromScale(1,1), 
         BackgroundTransparency=1, 
         Image=CONFIG.Logo, 
-        ImageColor3=C.Accent, -- เปลี่ยนสีโลโก้เป็นสีแดง
+        ImageColor3=Color3.fromRGB(255, 255, 255), -- สีขาว
         ScaleType=Enum.ScaleType.Fit 
     }, logo)
     
@@ -311,7 +311,7 @@ function Library.CreateLib(title, theme)
         ZIndex = 5,
     })
 
-    -- โลโก้ใน Island (โชว์เฉพาะตัว S สีแดง)
+    -- โลโก้ใน Island (เปลี่ยนเป็นสีขาวให้เข้ากัน)
     local islLogo = mk("Frame", {
         Size = UDim2.fromOffset(22, 22),
         Position = UDim2.fromOffset(13, 7),
@@ -322,7 +322,7 @@ function Library.CreateLib(title, theme)
         Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1,
         Image = CONFIG.Logo,
-        ImageColor3 = C.Accent,
+        ImageColor3 = Color3.fromRGB(255, 255, 255), -- สีขาว
         ScaleType = Enum.ScaleType.Fit,
         ZIndex = 6,
     }, islLogo)
