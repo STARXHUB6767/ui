@@ -18,7 +18,7 @@ local Library = {}
 -- CONFIG & THEME (StarX Dark Glass)
 -- ============================================================
 local CONFIG = {
-    Logo = "rbxassetid://71462783345465", -- ไอดีรูปโลโก้ของคุณ (ตัว S)
+    Logo = "rbxassetid://71462783345465",
     Sounds = { click = "rbxassetid://6895079853", on = "rbxassetid://6895079853", off = "rbxassetid://6895079853" },
     Volume = 0.5,
     Notifications = true,
@@ -31,8 +31,8 @@ local C = {
     Card       = Color3.fromRGB(255, 255, 255),
     Text       = Color3.fromRGB(244, 238, 240),
     Dim        = Color3.fromRGB(189, 178, 182),
-    Accent     = Color3.fromRGB(196, 43, 63),   -- สีแดงหลัก
-    Accent2    = Color3.fromRGB(122, 20, 36),   -- สีแดงเข้ม
+    Accent     = Color3.fromRGB(196, 43, 63),
+    Accent2    = Color3.fromRGB(122, 20, 36),
     AccentText = Color3.fromRGB(226, 149, 159),
     Off        = Color3.fromRGB(60, 50, 54),
     White      = Color3.fromRGB(255, 255, 255),
@@ -137,7 +137,7 @@ local function notify(title, text, kind, duration)
 end
 
 -- ============================================================
--- CLASS DEFINITIONS
+-- CLASS DEFINITIONS (ต้องประกาศ Local ก่อน!)
 -- ============================================================
 local Window = {}
 Window.__index = Window
@@ -199,7 +199,7 @@ function Library.CreateLib(title, theme)
     local Sidebar = mk("Frame", { Size=UDim2.new(0, SIDE_W, 1, 0), BackgroundColor3=C.Sidebar, BackgroundTransparency=T.Sidebar, BorderSizePixel=0 }, Main)
     mk("Frame", { Size=UDim2.new(0,1,1,0), Position=UDim2.new(1,-1,0,0), BackgroundColor3=C.White, BackgroundTransparency=T.Line, BorderSizePixel=0 }, Sidebar)
 
-    -- ★ แก้ไขโลโก้: เปลี่ยนสีรูปภาพให้เป็นสีขาวเพื่อให้ตัดกับพื้นหลังแดงเข้ม
+    -- ★ แก้ไขโลโก้: เปลี่ยนสีรูปภาพเป็นสีขาว ตัดกับพื้นหลังแดงเข้ม
     local Brand = mk("Frame", { Size=UDim2.new(1,0,0,72), BackgroundTransparency=1 }, Sidebar)
     local logo = mk("Frame", { Size=UDim2.fromOffset(48,48), Position=UDim2.fromOffset(12,12), BackgroundColor3=C.Accent2, BorderSizePixel=0 }, Brand)
     corner(logo, 14)
@@ -311,7 +311,7 @@ function Library.CreateLib(title, theme)
         ZIndex = 5,
     })
 
-    -- โลโก้ใน Island (เปลี่ยนเป็นสีขาวให้เข้ากัน)
+    -- โลโก้ใน Island (สีขาว)
     local islLogo = mk("Frame", {
         Size = UDim2.fromOffset(22, 22),
         Position = UDim2.fromOffset(13, 7),
@@ -322,7 +322,7 @@ function Library.CreateLib(title, theme)
         Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1,
         Image = CONFIG.Logo,
-        ImageColor3 = Color3.fromRGB(255, 255, 255), -- สีขาว
+        ImageColor3 = Color3.fromRGB(255, 255, 255),
         ScaleType = Enum.ScaleType.Fit,
         ZIndex = 6,
     }, islLogo)
