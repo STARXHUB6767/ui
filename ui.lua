@@ -38,8 +38,8 @@ local C = {
     White      = Color3.fromRGB(255, 255, 255),
     ScrollBar  = Color3.fromRGB(120, 100, 105),
     Green      = Color3.fromRGB(63, 191, 107),
-    Red        = Color3.fromRGB(229, 72, 77),   -- แก้ไข: เพิ่ม Red กลับมา
-    Yellow     = Color3.fromRGB(242, 182, 61), -- แก้ไข: เพิ่ม Yellow กลับมา
+    Red        = Color3.fromRGB(229, 72, 77),
+    Yellow     = Color3.fromRGB(242, 182, 61),
 }
 
 local T = { Window = 0.26, Sidebar = 0.04, Bar = 0.28, Card = 0.94, Line = 0.92, Stroke = 0.88 }
@@ -137,11 +137,20 @@ local function notify(title, text, kind, duration)
 end
 
 -- ============================================================
--- WINDOW CLASS
+-- CLASS DEFINITIONS (สำคัญมาก: ต้องประกาศก่อนใช้งาน)
 -- ============================================================
 local Window = {}
 Window.__index = Window
 
+local Tab = {}
+Tab.__index = Tab
+
+local Section = {}
+Section.__index = Section
+
+-- ============================================================
+-- WINDOW CREATION
+-- ============================================================
 function Library.CreateLib(title, theme)
     if ENV.StarX_Cleanup then pcall(ENV.StarX_Cleanup) end
     for _, g in ipairs(PG:GetChildren()) do if g.Name == "StarXHub" then g:Destroy() end end
@@ -348,11 +357,8 @@ function Window:Destroy()
 end
 
 -- ============================================================
--- TAB CLASS
+-- TAB METHODS
 -- ============================================================
-Tab = {}
-Tab.__index = Tab
-
 function Tab:NewSection(name)
     self._secCount = self._secCount + 1
     local sec = mk("Frame", { Size=UDim2.new(1,0,0,0), AutomaticSize=Enum.AutomaticSize.Y, BackgroundColor3=C.Card, BackgroundTransparency=T.Card, BorderSizePixel=0, LayoutOrder=self._secCount, ClipsDescendants=true }, self.Scroll)
@@ -368,11 +374,8 @@ function Tab:NewSection(name)
 end
 
 -- ============================================================
--- SECTION CLASS (Components)
+-- SECTION COMPONENTS
 -- ============================================================
-Section = {}
-Section.__index = Section
-
 function Section:_row(h)
     self._rowCount = self._rowCount + 1
     local r = mk("Frame", { Size=UDim2.new(1,0,0,h), BackgroundTransparency=1, LayoutOrder=self._rowCount }, self.Frame)
