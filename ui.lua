@@ -18,7 +18,7 @@ local Library = {}
 -- CONFIG & THEME (StarX Dark Glass)
 -- ============================================================
 local CONFIG = {
-    Logo = "rbxassetid://71462783345465",
+    Logo = "rbxassetid://71462783345465", -- ไอดีรูปโลโก้ของคุณ (ตัว S)
     Sounds = { click = "rbxassetid://6895079853", on = "rbxassetid://6895079853", off = "rbxassetid://6895079853" },
     Volume = 0.5,
     Notifications = true,
@@ -31,8 +31,8 @@ local C = {
     Card       = Color3.fromRGB(255, 255, 255),
     Text       = Color3.fromRGB(244, 238, 240),
     Dim        = Color3.fromRGB(189, 178, 182),
-    Accent     = Color3.fromRGB(196, 43, 63),
-    Accent2    = Color3.fromRGB(122, 20, 36),
+    Accent     = Color3.fromRGB(196, 43, 63),   -- สีแดงหลัก
+    Accent2    = Color3.fromRGB(122, 20, 36),   -- สีแดงเข้ม
     AccentText = Color3.fromRGB(226, 149, 159),
     Off        = Color3.fromRGB(60, 50, 54),
     White      = Color3.fromRGB(255, 255, 255),
@@ -137,7 +137,7 @@ local function notify(title, text, kind, duration)
 end
 
 -- ============================================================
--- CLASS DEFINITIONS (สำคัญมาก: ต้องประกาศก่อนใช้งาน)
+-- CLASS DEFINITIONS
 -- ============================================================
 local Window = {}
 Window.__index = Window
@@ -199,10 +199,17 @@ function Library.CreateLib(title, theme)
     local Sidebar = mk("Frame", { Size=UDim2.new(0, SIDE_W, 1, 0), BackgroundColor3=C.Sidebar, BackgroundTransparency=T.Sidebar, BorderSizePixel=0 }, Main)
     mk("Frame", { Size=UDim2.new(0,1,1,0), Position=UDim2.new(1,-1,0,0), BackgroundColor3=C.White, BackgroundTransparency=T.Line, BorderSizePixel=0 }, Sidebar)
 
+    -- แก้ไขโลโก้: เอากรอบขาวออก ใส่สีพื้นหลังแดงเข้ม และสีรูปเป็นสีแดง
     local Brand = mk("Frame", { Size=UDim2.new(1,0,0,72), BackgroundTransparency=1 }, Sidebar)
-    local logo = mk("Frame", { Size=UDim2.fromOffset(48,48), Position=UDim2.fromOffset(12,12), BackgroundColor3=C.White, BorderSizePixel=0 }, Brand)
-    corner(logo, 14); mk("UIGradient", { Rotation=45, Color=ColorSequence.new(C.Accent, C.Accent2) }, logo)
-    mk("ImageLabel", { Size=UDim2.fromScale(1,1), BackgroundTransparency=1, Image=CONFIG.Logo, ScaleType=Enum.ScaleType.Fit }, logo)
+    local logo = mk("Frame", { Size=UDim2.fromOffset(48,48), Position=UDim2.fromOffset(12,12), BackgroundColor3=C.Accent2, BorderSizePixel=0 }, Brand)
+    corner(logo, 14)
+    mk("ImageLabel", { 
+        Size=UDim2.fromScale(1,1), 
+        BackgroundTransparency=1, 
+        Image=CONFIG.Logo, 
+        ImageColor3=C.Accent, -- เปลี่ยนสีโลโก้เป็นสีแดง
+        ScaleType=Enum.ScaleType.Fit 
+    }, logo)
     
     label(Brand, { Size=UDim2.new(1,-70,0,20), Position=UDim2.fromOffset(70,16), Text=self.Title, Font=FONT_B, TextSize=18 })
     label(Brand, { Size=UDim2.new(1,-70,0,14), Position=UDim2.fromOffset(70,38), Text="UI Library", TextSize=13, TextColor3=C.Dim })
@@ -271,6 +278,60 @@ function Library.CreateLib(title, theme)
 
     ENV.StarX_Cleanup = function() self:Destroy() end
 
+    -- ============================================================
+    -- DYNAMIC ISLAND ( สร้างไว้รอไว้เลย )
+    -- ============================================================
+    local Island = mk("TextButton", {
+        Name = "DynamicIsland",
+        Size = UDim2.fromOffset(148, 37),
+        AnchorPoint = Vector2.new(0.5, 0),
+        Position = UDim2.new(0.5, 0, 0, 11),
+        BackgroundColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+        AutoButtonColor = false,
+        Text = "",
+        ClipsDescendants = true,
+        Visible = false,
+        ZIndex = 20,
+    }, GUI)
+    corner(Island, 18)
+    stroke(Island, C.Accent, 0.65, 1)
+    self.Island = Island
+
+    -- ข้อความใน Island
+    label(Island, {
+        Size = UDim2.fromOffset(100, 37),
+        AnchorPoint = Vector2.new(0.5, 0),
+        Position = UDim2.fromScale(0.5, 0),
+        Text = "STARX HUB",
+        Font = FONT_B,
+        TextSize = 12,
+        TextColor3 = C.White,
+        TextXAlignment = Enum.TextXAlignment.Center,
+        ZIndex = 5,
+    })
+
+    -- โลโก้ใน Island (โชว์เฉพาะตัว S สีแดง)
+    local islLogo = mk("Frame", {
+        Size = UDim2.fromOffset(22, 22),
+        Position = UDim2.fromOffset(13, 7),
+        BackgroundTransparency = 1,
+        ZIndex = 6,
+    }, Island)
+    mk("ImageLabel", {
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1,
+        Image = CONFIG.Logo,
+        ImageColor3 = C.Accent,
+        ScaleType = Enum.ScaleType.Fit,
+        ZIndex = 6,
+    }, islLogo)
+
+    -- กด Island เพื่อเปิดกลับ
+    bind(Island.MouseButton1Click, function()
+        self:Restore() 
+    end)
+
     return self
 end
 
@@ -330,9 +391,30 @@ function Window:Notify(title, text, kind, dur) notify(title, text, kind, dur) en
 function Window:Minimize()
     if self.Minimized then return end
     self.Minimized = true
+    
+    -- ซ่อนหน้าต่างหลัก
     tw(self.MainScale, 0.45, { Scale=0.05 }, Enum.EasingStyle.Back, Enum.EasingDirection.In)
     tw(self.Main, 0.45, { GroupTransparency=1 })
     task.delay(0.45, function() if self.Minimized then self.Main.Visible = false end end)
+
+    -- เปิด Dynamic Island
+    self.Island.Visible = true
+    self.Island.Size = UDim2.fromOffset(0, 37)
+    tw(self.Island, 0.5, { Size = UDim2.fromOffset(148, 37) }, Enum.EasingStyle.Back)
+end
+
+function Window:Restore()
+    if not self.Minimized then return end
+    self.Minimized = false
+    
+    -- ซ่อน Dynamic Island
+    tw(self.Island, 0.3, { Size = UDim2.fromOffset(0, 37) }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+    task.delay(0.3, function() if not self.Minimized then self.Island.Visible = false end end)
+
+    -- เปิดหน้าต่างหลัก
+    self.Main.Visible = true
+    tw(self.Main, 0.4, { GroupTransparency=0 })
+    tw(self.MainScale, 0.55, { Scale=self.fitScale() }, Enum.EasingStyle.Back)
 end
 
 function Window:Maximize()
