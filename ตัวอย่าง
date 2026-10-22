@@ -1,0 +1,2 @@
+local StarXUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/STARXHUB6767/ui/main/ui.lua?v=2"))()
+local Window = StarXUI.CreateLib("STARX HUB", "DarkTheme")
