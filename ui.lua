@@ -137,7 +137,7 @@ local function notify(title, text, kind, duration)
 end
 
 -- ============================================================
--- CLASS DEFINITIONS (ต้องประกาศ Local ก่อน!)
+-- CLASS DEFINITIONS
 -- ============================================================
 local Window = {}
 Window.__index = Window
@@ -199,7 +199,6 @@ function Library.CreateLib(title, theme)
     local Sidebar = mk("Frame", { Size=UDim2.new(0, SIDE_W, 1, 0), BackgroundColor3=C.Sidebar, BackgroundTransparency=T.Sidebar, BorderSizePixel=0 }, Main)
     mk("Frame", { Size=UDim2.new(0,1,1,0), Position=UDim2.new(1,-1,0,0), BackgroundColor3=C.White, BackgroundTransparency=T.Line, BorderSizePixel=0 }, Sidebar)
 
-    -- ★ แก้ไขโลโก้: เปลี่ยนสีรูปภาพเป็นสีขาว ตัดกับพื้นหลังแดงเข้ม
     local Brand = mk("Frame", { Size=UDim2.new(1,0,0,72), BackgroundTransparency=1 }, Sidebar)
     local logo = mk("Frame", { Size=UDim2.fromOffset(48,48), Position=UDim2.fromOffset(12,12), BackgroundColor3=C.Accent2, BorderSizePixel=0 }, Brand)
     corner(logo, 14)
@@ -207,7 +206,7 @@ function Library.CreateLib(title, theme)
         Size=UDim2.fromScale(1,1), 
         BackgroundTransparency=1, 
         Image=CONFIG.Logo, 
-        ImageColor3=Color3.fromRGB(255, 255, 255), -- สีขาว
+        ImageColor3=Color3.fromRGB(255, 255, 255),
         ScaleType=Enum.ScaleType.Fit 
     }, logo)
     
@@ -253,7 +252,6 @@ function Library.CreateLib(title, theme)
     ToastHolder = mk("Frame", { Name="Toasts", Size=UDim2.new(0,280,1,-80), AnchorPoint=Vector2.new(1,0), Position=UDim2.new(1,-16,0,64), BackgroundTransparency=1, ZIndex=30 }, GUI)
     mk("UIListLayout", { Padding=UDim.new(0,8), SortOrder=Enum.SortOrder.LayoutOrder, HorizontalAlignment=Enum.HorizontalAlignment.Right }, ToastHolder)
 
-    -- Draggable
     local dragging, dragStart, startPos = false, nil, nil
     bind(TopBar.InputBegan, function(input)
         if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
@@ -278,9 +276,7 @@ function Library.CreateLib(title, theme)
 
     ENV.StarX_Cleanup = function() self:Destroy() end
 
-    -- ============================================================
-    -- DYNAMIC ISLAND ( สร้างไว้รอไว้เลย )
-    -- ============================================================
+    -- Dynamic Island
     local Island = mk("TextButton", {
         Name = "DynamicIsland",
         Size = UDim2.fromOffset(148, 37),
@@ -298,7 +294,6 @@ function Library.CreateLib(title, theme)
     stroke(Island, C.Accent, 0.65, 1)
     self.Island = Island
 
-    -- ข้อความใน Island
     label(Island, {
         Size = UDim2.fromOffset(100, 37),
         AnchorPoint = Vector2.new(0.5, 0),
@@ -311,7 +306,6 @@ function Library.CreateLib(title, theme)
         ZIndex = 5,
     })
 
-    -- โลโก้ใน Island (สีขาว)
     local islLogo = mk("Frame", {
         Size = UDim2.fromOffset(22, 22),
         Position = UDim2.fromOffset(13, 7),
@@ -327,7 +321,6 @@ function Library.CreateLib(title, theme)
         ZIndex = 6,
     }, islLogo)
 
-    -- กด Island เพื่อเปิดกลับ
     bind(Island.MouseButton1Click, function()
         self:Restore() 
     end)
@@ -392,12 +385,10 @@ function Window:Minimize()
     if self.Minimized then return end
     self.Minimized = true
     
-    -- ซ่อนหน้าต่างหลัก
     tw(self.MainScale, 0.45, { Scale=0.05 }, Enum.EasingStyle.Back, Enum.EasingDirection.In)
     tw(self.Main, 0.45, { GroupTransparency=1 })
     task.delay(0.45, function() if self.Minimized then self.Main.Visible = false end end)
 
-    -- เปิด Dynamic Island
     self.Island.Visible = true
     self.Island.Size = UDim2.fromOffset(0, 37)
     tw(self.Island, 0.5, { Size = UDim2.fromOffset(148, 37) }, Enum.EasingStyle.Back)
@@ -407,11 +398,9 @@ function Window:Restore()
     if not self.Minimized then return end
     self.Minimized = false
     
-    -- ซ่อน Dynamic Island
     tw(self.Island, 0.3, { Size = UDim2.fromOffset(0, 37) }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
     task.delay(0.3, function() if not self.Minimized then self.Island.Visible = false end end)
 
-    -- เปิดหน้าต่างหลัก
     self.Main.Visible = true
     tw(self.Main, 0.4, { GroupTransparency=0 })
     tw(self.MainScale, 0.55, { Scale=self.fitScale() }, Enum.EasingStyle.Back)
