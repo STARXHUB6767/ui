@@ -200,7 +200,7 @@ function Library.CreateLib(title, theme)
     end
 
     label(Brand, { Size = UDim2.new(1, -76, 0, 20), Position = UDim2.fromOffset(70, 16), Text = "StarX Hub★", Font = FONT_B, TextSize = 18, ZIndex = 2 })
-    label(Brand, { Size = UDim2.new(1, -76, 0, 14), Position = UDim2.fromOffset(70, 38), Text = "discord.gg/Los Angeles 𝟏𝟖+", TextSize = 13, TextColor3 = C.Dim, ZIndex = 2 })
+    label(Brand, { Size = UDim2.new(1, -76, 0, 14), Position = UDim2.fromOffset(70, 38), Text = "discord.gg", TextSize = 13, TextColor3 = C.Dim, ZIndex = 2 })
 
     -- Tab List
     local NavList = mk("ScrollingFrame", { Size = UDim2.new(1, -12, 1, -72 - 52), Position = UDim2.fromOffset(6, 72), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 2, ScrollBarImageColor3 = C.ScrollBar, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollingDirection = Enum.ScrollingDirection.Y, ZIndex = 2 }, Sidebar)
