@@ -142,7 +142,17 @@ local Section = {}; Section.__index = Section
 -- ============================================================
 -- WINDOW CREATION
 -- ============================================================
-function Library.CreateLib(title, theme, logoId)
+function Library.CreateLib(title, theme, logoId, ...)
+    -- รองรับทั้ง Library.CreateLib(...) และ Library:CreateLib(...)
+    if title == Library then title, theme, logoId = theme, logoId, ... end
+    -- รองรับแบบตาราง เช่น CreateLib({ Title = "syntyx.pro", Logo = "123" })
+    if type(title) == "table" then
+        local cfg = title
+        title = cfg.Title or cfg.Name or cfg.title or cfg.name
+        theme = cfg.Theme or cfg.theme or theme
+        logoId = cfg.Logo or cfg.LogoId or cfg.logo or logoId
+    end
+    if title ~= nil and type(title) ~= "string" then title = tostring(title) end
     for _, g in ipairs(PG:GetChildren()) do if g.Name == "SyntyxPro" or g.Name == "StarXHub" then g:Destroy() end end
     if logoId and logoId ~= "" then LOGO_IMAGE_ID = fixId(tostring(logoId)) end
 
