@@ -1,5 +1,5 @@
 -- ============================================================
--- StarX UI Library (v280000 Topographic Theme)
+-- syntyx.pro UI Library (Topographic Theme)
 -- ============================================================
 local Players          = game:GetService("Players")
 local RunService       = game:GetService("RunService")
@@ -16,7 +16,11 @@ local Library = {}
 -- ============================================================
 -- CONFIG & THEME
 -- ============================================================
-local LOGO_IMAGE_ID = "71462783345465"
+-- แบรนด์: เปลี่ยนชื่อ/โลโก้ได้ที่นี่ หรือส่งผ่าน CreateLib(title, theme, logoId)
+local BRAND_NAME    = "syntyx.pro"
+local BRAND_SUB     = "discord.gg"
+-- ใส่ Roblox Image/Decal ID ของโลโก้ syntyx.pro (ไฟล์ assets/logo.png) ถ้าว่างจะแสดงตัว "S" สีแดงแทน
+local LOGO_IMAGE_ID = ""
 local TOPO_IMAGE_ID = "rbxassetid://137559326703430" -- ลาย Topographic
 
 local SOUND_IDS = { click = "6895079853", on = "6895079853", off = "6895079853" }
@@ -30,9 +34,9 @@ end
 LOGO_IMAGE_ID = fixId(LOGO_IMAGE_ID)
 
 local C = {
-    Window = Color3.fromRGB(24, 18, 21), Sidebar = Color3.fromRGB(14, 10, 12), Bar = Color3.fromRGB(14, 10, 12), Card = Color3.fromRGB(20, 20, 22),
-    Text = Color3.fromRGB(244, 238, 240), Dim = Color3.fromRGB(189, 178, 182), Accent = Color3.fromRGB(196, 43, 63), Accent2 = Color3.fromRGB(122, 20, 36),
-    AccentText = Color3.fromRGB(226, 149, 159), Off = Color3.fromRGB(60, 50, 54), Plate = Color3.fromRGB(236, 228, 231),
+    Window = Color3.fromRGB(22, 16, 18), Sidebar = Color3.fromRGB(13, 9, 10), Bar = Color3.fromRGB(13, 9, 10), Card = Color3.fromRGB(20, 18, 19),
+    Text = Color3.fromRGB(244, 238, 240), Dim = Color3.fromRGB(189, 178, 182), Accent = Color3.fromRGB(228, 16, 30), Accent2 = Color3.fromRGB(110, 4, 12),
+    AccentText = Color3.fromRGB(255, 120, 130), Off = Color3.fromRGB(60, 50, 54), Plate = Color3.fromRGB(236, 228, 231),
     Red = Color3.fromRGB(229, 72, 77), Yellow = Color3.fromRGB(242, 182, 61), Green = Color3.fromRGB(63, 191, 107), Live = Color3.fromRGB(63, 191, 107),
     White = Color3.fromRGB(255, 255, 255), ScrollBar = Color3.fromRGB(120, 100, 105),
 }
@@ -138,15 +142,16 @@ local Section = {}; Section.__index = Section
 -- ============================================================
 -- WINDOW CREATION
 -- ============================================================
-function Library.CreateLib(title, theme)
-    for _, g in ipairs(PG:GetChildren()) do if g.Name == "StarXHub" then g:Destroy() end end
+function Library.CreateLib(title, theme, logoId)
+    for _, g in ipairs(PG:GetChildren()) do if g.Name == "SyntyxPro" or g.Name == "StarXHub" then g:Destroy() end end
+    if logoId and logoId ~= "" then LOGO_IMAGE_ID = fixId(tostring(logoId)) end
 
     local self = setmetatable({}, Window)
-    self.Title = title or "StarX Hub"
+    self.Title = (title and title ~= "") and title or BRAND_NAME
     self.Tabs = {}
     self.Minimized = false
 
-    local GUI = mk("ScreenGui", { Name = "StarXHub", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling }, PG)
+    local GUI = mk("ScreenGui", { Name = "SyntyxPro", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling }, PG)
     self.GUI = GUI
     
     local WIN_W, WIN_H, SIDE_W, TOP_H, BOT_H = 700, 440, 190, 44, 32
@@ -197,10 +202,12 @@ function Library.CreateLib(title, theme)
         local g = logo:FindFirstChildOfClass("UIGradient"); if g then g:Destroy() end
         logo.BackgroundColor3 = C.Plate; logo.BackgroundTransparency = 1
         mk("ImageLabel", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Image = LOGO_IMAGE_ID, ScaleType = Enum.ScaleType.Fit }, logo)
+    else
+        label(logo, { Size = UDim2.fromScale(1, 1), Text = "S", Font = Enum.Font.GothamBlack, TextSize = 30, TextColor3 = C.White, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 3 })
     end
 
-    label(Brand, { Size = UDim2.new(1, -76, 0, 20), Position = UDim2.fromOffset(70, 16), Text = "StarX Hub★", Font = FONT_B, TextSize = 18, ZIndex = 2 })
-    label(Brand, { Size = UDim2.new(1, -76, 0, 14), Position = UDim2.fromOffset(70, 38), Text = "discord.gg", TextSize = 13, TextColor3 = C.Dim, ZIndex = 2 })
+    label(Brand, { Size = UDim2.new(1, -76, 0, 20), Position = UDim2.fromOffset(70, 16), Text = self.Title, Font = FONT_B, TextSize = 18, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 2 })
+    label(Brand, { Size = UDim2.new(1, -76, 0, 14), Position = UDim2.fromOffset(70, 38), Text = BRAND_SUB, TextSize = 13, TextColor3 = C.Dim, ZIndex = 2 })
 
     -- Tab List
     local NavList = mk("ScrollingFrame", { Size = UDim2.new(1, -12, 1, -72 - 52), Position = UDim2.fromOffset(6, 72), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 2, ScrollBarImageColor3 = C.ScrollBar, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollingDirection = Enum.ScrollingDirection.Y, ZIndex = 2 }, Sidebar)
@@ -297,9 +304,15 @@ function Library.CreateLib(title, theme)
     }, GUI)
     corner(Island, 18); stroke(Island, C.Accent, 0.65, 1)
     
-    label(Island, { Size = UDim2.fromOffset(100, 37), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0), Text = "STARX HUB", Font = FONT_B, TextSize = 12, TextColor3 = C.White, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 5 })
+    label(Island, { Size = UDim2.fromOffset(100, 37), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0), Text = self.Title, Font = FONT_B, TextSize = 12, TextTruncate = Enum.TextTruncate.AtEnd, TextColor3 = C.White, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 5 })
     local islLogo = mk("Frame", { Size = UDim2.fromOffset(22, 22), Position = UDim2.fromOffset(13, 7), BackgroundTransparency = 1, ZIndex = 6 }, Island)
-    mk("ImageLabel", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Image = LOGO_IMAGE_ID, ScaleType = Enum.ScaleType.Fit, ZIndex = 6 }, islLogo)
+    if LOGO_IMAGE_ID ~= "" then
+        mk("ImageLabel", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Image = LOGO_IMAGE_ID, ScaleType = Enum.ScaleType.Fit, ZIndex = 6 }, islLogo)
+    else
+        islLogo.BackgroundTransparency = 0; islLogo.BackgroundColor3 = C.White; corner(islLogo, 6)
+        mk("UIGradient", { Rotation = 45, Color = ColorSequence.new(C.Accent, C.Accent2) }, islLogo)
+        label(islLogo, { Size = UDim2.fromScale(1, 1), Text = "S", Font = Enum.Font.GothamBlack, TextSize = 14, TextColor3 = C.White, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 7 })
+    end
     bind(Island.MouseButton1Click, function() self:Restore() end)
 
     return self
